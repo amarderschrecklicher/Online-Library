@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class Book {
+public class Book {
     @Id
     @SequenceGenerator(
             name = "book_sequence",
