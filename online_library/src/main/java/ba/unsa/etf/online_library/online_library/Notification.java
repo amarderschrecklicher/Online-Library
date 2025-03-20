@@ -1,5 +1,7 @@
 package ba.unsa.etf.online_library.online_library;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,28 +13,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="members")
+@Table(name="notifications")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member{
-
+public class Notification {
     @Id
     @SequenceGenerator(
-            name = "member_sequence",
-            sequenceName = "member_sequence",
+            name = "notification_sequence",
+            sequenceName = "notification_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "member_sequence"
+            generator = "notfication_sequence"
     )
     private Long id;
-    private String Name;
-    private String Surname;
-    private String username;   
-    private String email;
-    private String password;
-    private String status;
-
+    private Long memberId;
+    private String token;
+    private String message;
+    private LocalDateTime sent;
 }

@@ -11,28 +11,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="members")
+@Table(name="books")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member{
-
+public abstract class Book {
     @Id
     @SequenceGenerator(
-            name = "member_sequence",
-            sequenceName = "member_sequence",
+            name = "book_sequence",
+            sequenceName = "book_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "member_sequence"
+            generator = "book_sequence"
     )
     private Long id;
-    private String Name;
-    private String Surname;
-    private String username;   
-    private String email;
-    private String password;
-    private String status;
+    private String title;
+    private String author;
+    private String genre;   
+    private Long publishedYear;
+
 
 }

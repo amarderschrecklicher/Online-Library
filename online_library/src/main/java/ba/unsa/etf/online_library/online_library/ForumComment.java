@@ -1,38 +1,33 @@
 package ba.unsa.etf.online_library.online_library;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="members")
+@Table(name="forum_comments")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member{
-
+public class ForumComment {
     @Id
     @SequenceGenerator(
-            name = "member_sequence",
-            sequenceName = "member_sequence",
+            name = "comment_sequence",
+            sequenceName = "comment_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "member_sequence"
+            generator = "comment_sequence"
     )
     private Long id;
-    private String Name;
-    private String Surname;
-    private String username;   
-    private String email;
-    private String password;
-    private String status;
-
+    private Long forumPostId;
+    private Long memberId;
+    private String content;
 }
