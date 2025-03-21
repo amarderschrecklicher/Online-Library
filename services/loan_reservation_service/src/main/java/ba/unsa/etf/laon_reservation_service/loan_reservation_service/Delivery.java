@@ -31,6 +31,6 @@ public class Delivery {
     private Long bookCopyId;
     private Long memberId;
     private LocalDateTime deliveryDate;
-    private LocalDateTime deliveryAddress;
+    private String deliveryAddress;
     private String status;
 }
