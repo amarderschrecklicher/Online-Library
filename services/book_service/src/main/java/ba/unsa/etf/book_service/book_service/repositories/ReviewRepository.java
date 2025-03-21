@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import ba.unsa.etf.book_service.book_service.Review;
 
+
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
