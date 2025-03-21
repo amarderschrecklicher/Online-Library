@@ -3,6 +3,7 @@ package ba.unsa.etf.forum_service.forum_service;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -27,7 +28,8 @@ public class ForumComment {
             generator = "comment_sequence"
     )
     private Long id;
-    private Long forumPostId;
+    @OneToMany(mappedBy = "forum_posts")
+    private ForumPost post;
     private Long memberId;
     private String content;
 }

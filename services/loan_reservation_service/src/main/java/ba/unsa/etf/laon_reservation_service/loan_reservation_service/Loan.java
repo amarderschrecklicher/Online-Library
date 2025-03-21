@@ -1,10 +1,12 @@
 package ba.unsa.etf.laon_reservation_service.loan_reservation_service;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -34,4 +36,6 @@ public class Loan {
     private LocalDateTime returnDate;
     private LocalDateTime dueDate;   
     private Boolean returned;
+    @OneToMany
+    private List<Reservation> reservations;
 }

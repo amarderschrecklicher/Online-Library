@@ -29,7 +29,7 @@ public class Reservation {
             generator = "reservation_sequence"
     )
     private Long id;
-    private Long bookCopId;
+    private Long bookCopyId;
     private Long memberId;
     private LocalDateTime date;   
     private String status;
