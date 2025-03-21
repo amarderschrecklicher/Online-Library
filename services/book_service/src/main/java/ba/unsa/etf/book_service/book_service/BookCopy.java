@@ -1,10 +1,10 @@
-package ba.unsa.etf.online_library.online_library;
-import java.time.LocalDateTime;
+package ba.unsa.etf.book_service.book_service;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -12,25 +12,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="deliveries")
+@Table(name="book_copies")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Delivery {
+public class BookCopy {
     @Id
     @SequenceGenerator(
-            name = "delivery_sequence",
-            sequenceName = "delivery_sequence",
+            name = "book_copy_sequence",
+            sequenceName = "book_copy_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "delivery_sequence"
+            generator = "book_copy_sequence"
     )
     private Long id;
-    private Long bookCopyId;
-    private Long memberId;
-    private LocalDateTime deliveryDate;
-    private LocalDateTime deliveryAddress;
+    @OneToMany(mappedBy = "books")
+    private Book book; 
+    private Long number;
     private String status;
+    
 }

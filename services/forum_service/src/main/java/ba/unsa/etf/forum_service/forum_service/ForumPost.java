@@ -1,36 +1,33 @@
-package ba.unsa.etf.online_library.online_library;
+package ba.unsa.etf.forum_service.forum_service;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Table(name="book_copies")
+@Table(name="forum_posts")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookCopy extends Book {
+public class ForumPost {
     @Id
     @SequenceGenerator(
-            name = "book_copy_sequence",
-            sequenceName = "book_copy_sequence",
+            name = "post_sequence",
+            sequenceName = "post_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "book_copy_sequence"
+            generator = "post_sequence"
     )
     private Long id;
-    private Long number;
-    private String status;
-    
+    private Long memberId;
+    private String title;
+    private String content;
 }

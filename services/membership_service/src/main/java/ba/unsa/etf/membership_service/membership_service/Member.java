@@ -1,5 +1,4 @@
-package ba.unsa.etf.online_library.online_library;
-import java.time.LocalDateTime;
+package ba.unsa.etf.membership_service.membership_service;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,24 +11,28 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="reviews")
+@Table(name="members")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Review {
+public class Member{
+
     @Id
     @SequenceGenerator(
-            name = "review_sequence",
-            sequenceName = "review_sequence",
+            name = "member_sequence",
+            sequenceName = "member_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "review_sequence"
+            generator = "member_sequence"
     )
     private Long id;
-    private Long bookId;
-    private Long memberId;
-    private Long rating;
-    private String text;
+    private String Name;
+    private String Surname;
+    private String username;   
+    private String email;
+    private String password;
+    private String status;
+
 }

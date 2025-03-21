@@ -1,37 +1,33 @@
-package ba.unsa.etf.online_library.online_library;
-import java.time.LocalDateTime;
+package ba.unsa.etf.forum_service.forum_service;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="loans")
+@Table(name="forum_comments")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Loan {
+public class ForumComment {
     @Id
     @SequenceGenerator(
-            name = "loan_sequence",
-            sequenceName = "loan_sequence",
+            name = "comment_sequence",
+            sequenceName = "comment_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "loan_sequence"
+            generator = "comment_sequence"
     )
     private Long id;
-    private Long bookCopyId;
+    private Long forumPostId;
     private Long memberId;
-    private LocalDateTime loanDate;
-    private LocalDateTime returnDate;
-    private LocalDateTime dueDate;   
-    private Boolean returned;
+    private String content;
 }

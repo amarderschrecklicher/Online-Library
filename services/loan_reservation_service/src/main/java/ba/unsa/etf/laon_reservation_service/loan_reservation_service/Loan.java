@@ -1,4 +1,5 @@
-package ba.unsa.etf.online_library.online_library;
+package ba.unsa.etf.laon_reservation_service.loan_reservation_service;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,26 +12,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="books")
+@Table(name="loans")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Book {
+public class Loan {
     @Id
     @SequenceGenerator(
-            name = "book_sequence",
-            sequenceName = "book_sequence",
+            name = "loan_sequence",
+            sequenceName = "loan_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "book_sequence"
+            generator = "loan_sequence"
     )
     private Long id;
-    private String title;
-    private String author;
-    private String genre;   
-    private Long publishedYear;
-
-
+    private Long bookCopyId;
+    private Long memberId;
+    private LocalDateTime loanDate;
+    private LocalDateTime returnDate;
+    private LocalDateTime dueDate;   
+    private Boolean returned;
 }

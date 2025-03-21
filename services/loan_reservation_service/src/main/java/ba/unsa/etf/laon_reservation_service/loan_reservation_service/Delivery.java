@@ -1,33 +1,36 @@
-package ba.unsa.etf.online_library.online_library;
+package ba.unsa.etf.laon_reservation_service.loan_reservation_service;
+import java.time.LocalDateTime;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="forum_posts")
+@Table(name="deliveries")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ForumPost {
+public class Delivery {
     @Id
     @SequenceGenerator(
-            name = "post_sequence",
-            sequenceName = "post_sequence",
+            name = "delivery_sequence",
+            sequenceName = "delivery_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "post_sequence"
+            generator = "delivery_sequence"
     )
     private Long id;
+    private Long bookCopyId;
     private Long memberId;
-    private String title;
-    private String content;
+    private LocalDateTime deliveryDate;
+    private LocalDateTime deliveryAddress;
+    private String status;
 }

@@ -1,4 +1,4 @@
-package ba.unsa.etf.online_library.online_library;
+package ba.unsa.etf.laon_reservation_service.loan_reservation_service;
 
 import java.time.LocalDateTime;
 
@@ -13,24 +13,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="notifications")
+@Table(name="reservations")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Notification {
+public class Reservation {
     @Id
     @SequenceGenerator(
-            name = "notification_sequence",
-            sequenceName = "notification_sequence",
+            name = "reservation_sequence",
+            sequenceName = "reservation_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "notfication_sequence"
+            generator = "reservation_sequence"
     )
     private Long id;
+    private Long bookCopId;
     private Long memberId;
-    private String token;
-    private String message;
-    private LocalDateTime sent;
+    private LocalDateTime date;   
+    private String status;
 }

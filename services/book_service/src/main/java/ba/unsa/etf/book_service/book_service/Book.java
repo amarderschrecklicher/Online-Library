@@ -1,33 +1,40 @@
-package ba.unsa.etf.online_library.online_library;
+package ba.unsa.etf.book_service.book_service;
 
+import java.util.List;
+
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="forum_comments")
+@Table(name="books")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ForumComment {
+public class Book {
     @Id
     @SequenceGenerator(
-            name = "comment_sequence",
-            sequenceName = "comment_sequence",
+            name = "book_sequence",
+            sequenceName = "book_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "comment_sequence"
+            generator = "book_sequence"
     )
     private Long id;
-    private Long forumPostId;
-    private Long memberId;
-    private String content;
+    private String title;
+    private String author;
+    private String genre;   
+    private Long publishedYear;
+    @OneToMany
+    private List<BookCopy> bookCopies;
+
 }
