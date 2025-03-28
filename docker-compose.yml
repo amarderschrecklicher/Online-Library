@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  discovery-server:
+    build: ./discovery-server
+    ports:
+      - "8761:8761"
+
+  config-server:
+    build: ./config-server
+    ports:
+      - "8888:8888"
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - discovery-server
+      - config-server
+
+  book-service:
+    build: ./services/book-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - discovery-server
+      - config-server
+
+  membership-service:
+    build: ./services/membership-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - discovery-server
+      - config-server
+
+  mysql-bookdb:
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: bookdb

@@ -1,4 +1,4 @@
-package ba.unsa.etf.book_service.book_service;
+package ba.unsa.etf.book_service.book_service.models;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;

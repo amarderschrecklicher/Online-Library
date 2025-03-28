@@ -1,0 +1,18 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: book-service
+          uri: lb://book-service
+          predicates:
+            - Path=/api/books/**
+        - id: membership-service
+          uri: lb://membership-service
+          predicates:
+            - Path=/api/members/**
+    discovery:
+      locator:
+        enabled: true

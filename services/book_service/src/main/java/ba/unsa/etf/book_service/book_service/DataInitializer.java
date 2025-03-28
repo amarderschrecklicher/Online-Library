@@ -3,6 +3,8 @@ package ba.unsa.etf.book_service.book_service;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import ba.unsa.etf.book_service.book_service.models.Book;
+import ba.unsa.etf.book_service.book_service.models.BookCopy;
 import ba.unsa.etf.book_service.book_service.repositories.BookRepository;
 
 import java.util.ArrayList;

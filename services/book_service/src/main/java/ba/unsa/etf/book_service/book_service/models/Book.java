@@ -1,4 +1,4 @@
-package ba.unsa.etf.book_service.book_service;
+package ba.unsa.etf.book_service.book_service.models;
 
 import java.util.List;
 
@@ -10,9 +10,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Entity
 @Table(name="books")
 @Data

@@ -1,7 +1,13 @@
-spring.application.name=book_service
 spring:
+  cloud:
+    config:
+      enabled: false
+
+  application:
+    name: book-service
+
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:bookdb
     driver-class-name: org.h2.Driver
     username: sa
     password:
