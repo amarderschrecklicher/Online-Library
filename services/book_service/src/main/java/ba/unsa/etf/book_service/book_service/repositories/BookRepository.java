@@ -11,5 +11,5 @@ import ba.unsa.etf.book_service.book_service.models.Book;
 public interface BookRepository extends JpaRepository<Book, Long> {
 
     Optional<Book> findByTitle(String title);
-
+    boolean existsByTitle(String title);
 }

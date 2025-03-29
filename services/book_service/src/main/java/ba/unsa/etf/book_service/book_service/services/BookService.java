@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -31,10 +32,12 @@ public class BookService {
         return bookRepository.getById(id);
     }
 
-    public BookDto GetBookByTitle(String title) {
-        Book book =  bookRepository.findByTitle(title)
-        .orElseThrow(() -> new RuntimeException("Book not found with title: " + title));;
-        return BookMapper.toDto(book);
+    public Optional<Book> getBookByTitle(String title) {
+        return bookRepository.findByTitle(title);
+    }
+
+    public boolean existsByTitle(String title) {
+        return bookRepository.existsByTitle(title);
     }
 
     public Book AddNewBook(Book book) {
@@ -53,8 +56,14 @@ public class BookService {
         return savedBook;
     }
 
-    public Book updateBook(Long id, Book updatedBook) {
-        Book existingBook = bookRepository.getById(id);
+    public Book updateBook(Long id, BookDto updatedBook) {
+
+        Book existingBook = bookRepository.findById(id).get();
+
+        existingBook.setAuthor(updatedBook.getAuthor());
+        existingBook.setTitle(updatedBook.getTitle());
+        existingBook.setGenre(updatedBook.getGenre());
+        existingBook.setPublishedYear(updatedBook.getPublishedYear());
 
         bookRepository.save(existingBook);
         return existingBook;

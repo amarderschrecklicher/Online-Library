@@ -28,11 +28,11 @@ class BookController {
         return bookService.GetAllBooks();
     }
 
-    @PostMapping(path = "/")
+    @PostMapping
     public ResponseEntity<?> createBook(@RequestBody BookDto bookDto) {
         System.out.println("Creating new Book!");
 
-        if (bookService.GetBookByTitle(bookDto.getTitle())!=null) {
+        if (bookService.existsByTitle(bookDto.getTitle())) {
             return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST)
             .body("Book already exists");
         }
@@ -48,7 +48,12 @@ class BookController {
     }
 
     @PutMapping(path = "/{bookId}")
-    public ResponseEntity<Book> updateBook(@PathVariable("bookId") Long id, @RequestBody Book updatedBookData){
+    public ResponseEntity<?> updateBook(@PathVariable("bookId") Long id, @RequestBody BookDto updatedBookData){
+
+        if (bookService.existsByTitle(updatedBookData.getTitle())) {
+            return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST)
+            .body("Book already exists");
+        }
         try{
             Book updatedBook = bookService.updateBook(id, updatedBookData);
 
