@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ba.unsa.etf.book_service.book_service.dtos.BookDto;
+import ba.unsa.etf.book_service.book_service.mappers.BookMapper;
 import ba.unsa.etf.book_service.book_service.models.Book;
 import ba.unsa.etf.book_service.book_service.repositories.BookRepository;
-import ba.unsa.etf.book_service.mappers.BookMapper;
 import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;

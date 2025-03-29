@@ -1,4 +1,4 @@
-package ba.unsa.etf.book_service.mappers;
+package ba.unsa.etf.book_service.book_service.mappers;
 
 import ba.unsa.etf.book_service.book_service.dtos.BookDto;
 import ba.unsa.etf.book_service.book_service.models.Book;

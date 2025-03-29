@@ -1,45 +1,43 @@
 version: '3.8'
+
 services:
-  discovery-server:
-    build: ./discovery-server
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: bookdb
+    networks:
+      - backend
+
+  eureka-server:
+    build: ./eureka  
+    container_name: eureka-server
     ports:
       - "8761:8761"
-
-  config-server:
-    build: ./config-server
-    ports:
-      - "8888:8888"
-    environment:
-      - SPRING_PROFILES_ACTIVE=default
-
-  api-gateway:
-    build: ./api-gateway
-    ports:
-      - "8080:8080"
+    networks:
+      - backend
     depends_on:
-      - discovery-server
-      - config-server
+      - mysql
 
   book-service:
-    build: ./services/book-service
+    build: ./services/book_service
+    container_name: book-service
     ports:
       - "8081:8081"
-    depends_on:
-      - discovery-server
-      - config-server
-
-  membership-service:
-    build: ./services/membership-service
-    ports:
-      - "8082:8082"
-    depends_on:
-      - discovery-server
-      - config-server
-
-  mysql-bookdb:
-    image: mysql:8.0
-    ports:
-      - "3307:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: bookdb
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bookdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    depends_on:
+      - mysql
+      - eureka-server
+    networks:
+      - backend
+
+networks:
+  backend:

@@ -1,4 +1,4 @@
-package ba.unsa.etf.notification_service.notification_service;
+package ba.unsa.etf.membership_service.membership_service;
 
 import java.time.LocalDateTime;
 
