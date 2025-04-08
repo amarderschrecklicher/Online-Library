@@ -6,7 +6,7 @@ services:
     container_name: mysql-db
     restart: always
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: admin
       MYSQL_DATABASE: bookdb
@@ -14,7 +14,7 @@ services:
       - backend
 
   eureka-server:
-    build: ./eureka  
+    build: ./eureka
     container_name: eureka-server
     ports:
       - "8761:8761"
@@ -28,6 +28,22 @@ services:
     container_name: book-service
     ports:
       - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bookdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    depends_on:
+      - mysql
+      - eureka-server
+    networks:
+      - backend
+
+  forum-service:
+    build: ./services/forum_service
+    container_name: forum-service
+    ports:
+      - "8082:8082"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bookdb
       SPRING_DATASOURCE_USERNAME: root
