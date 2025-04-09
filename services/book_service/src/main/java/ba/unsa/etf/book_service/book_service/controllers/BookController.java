@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/book")
@@ -33,8 +35,9 @@ class BookController {
         System.out.println("Creating new Book!");
 
         if (bookService.existsByTitle(bookDto.getTitle())) {
-            return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST)
-            .body("Book already exists");
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Book already exists");
+            return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body(error);
         }
 
         Book newBook = bookService.CreateNewBook(
@@ -51,8 +54,9 @@ class BookController {
     public ResponseEntity<?> updateBook(@PathVariable("bookId") Long id, @RequestBody BookDto updatedBookData){
 
         if (bookService.existsByTitle(updatedBookData.getTitle())) {
-            return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST)
-            .body("Book already exists");
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Book already exists");
+            return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body(error);
         }
         try{
             Book updatedBook = bookService.updateBook(id, updatedBookData);
@@ -63,7 +67,9 @@ class BookController {
 
             return ResponseEntity.ok(updatedBook);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).build();
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Internal server error");
+            return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).body(error);
         }
     }
 
