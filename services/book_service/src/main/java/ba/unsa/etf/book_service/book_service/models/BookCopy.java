@@ -9,9 +9,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Entity
 @Table(name="book_copies")
 @Data
@@ -32,7 +34,7 @@ public class BookCopy {
     @ManyToOne
     @JoinColumn(name="book_id")
     private Book book; 
-    private Long number;
+    private String isbn;
     private String status;
     
 }

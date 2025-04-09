@@ -3,6 +3,7 @@ package ba.unsa.etf.book_service.book_service.controllers;
 import ba.unsa.etf.book_service.book_service.dtos.BookDto;
 import ba.unsa.etf.book_service.book_service.models.Book;
 import ba.unsa.etf.book_service.book_service.services.BookService;
+import jakarta.validation.Valid;
 
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createBook(@RequestBody BookDto bookDto) {
+    public ResponseEntity<?> createBook(@Valid @RequestBody BookDto bookDto) {
         System.out.println("Creating new Book!");
 
         if (bookService.existsByTitle(bookDto.getTitle())) {
@@ -51,7 +52,7 @@ class BookController {
     }
 
     @PutMapping(path = "/{bookId}")
-    public ResponseEntity<?> updateBook(@PathVariable("bookId") Long id, @RequestBody BookDto updatedBookData){
+    public ResponseEntity<?> updateBook(@PathVariable("bookId") Long id, @Valid @RequestBody BookDto updatedBookData){
 
         if (bookService.existsByTitle(updatedBookData.getTitle())) {
             Map<String, String> error = new HashMap<>();
