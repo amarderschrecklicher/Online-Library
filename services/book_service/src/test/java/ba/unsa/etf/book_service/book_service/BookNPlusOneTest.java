@@ -37,7 +37,7 @@ public class BookNPlusOneTest {
     @Test
     @Transactional
     public void testBooksWithCopies_ShouldAvoidNPlusOne() {
-        // 🔧 Insert test data manually
+
         for (int i = 1; i <= 3; i++) {
             Book book = Book.builder()
                     .title("Book " + i)
@@ -60,15 +60,12 @@ public class BookNPlusOneTest {
             }
         }
 
-        // ✅ Now clear the persistence context so Hibernate loads from DB
         entityManager.clear();
 
-        // 🔍 Track SQL queries
         Session session = entityManager.unwrap(Session.class);
         Statistics statistics = session.getSessionFactory().getStatistics();
         statistics.clear();
 
-        // ✅ ACT: Fetch with JOIN FETCH
         List<Book> books = bookRepository.findAllWithCopies(); // This should have a JOIN FETCH
 
         // Force loading of book copies
@@ -76,8 +73,6 @@ public class BookNPlusOneTest {
 
         long queryCount = statistics.getPrepareStatementCount();
         System.out.println("Queries executed: " + queryCount);
-
-        // ✅ ASSERT
         assertTrue(queryCount <= 2, "Expected max 2 queries, but got: " + queryCount);
     }
 }
