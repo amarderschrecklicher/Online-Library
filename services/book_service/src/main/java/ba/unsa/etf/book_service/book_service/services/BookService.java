@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ba.unsa.etf.book_service.book_service.dtos.BookDto;
-import ba.unsa.etf.book_service.book_service.mappers.BookMapper;
 import ba.unsa.etf.book_service.book_service.models.Book;
 import ba.unsa.etf.book_service.book_service.repositories.BookRepository;
 import jakarta.transaction.Transactional;
@@ -31,6 +30,10 @@ public class BookService {
     public Book GetBookById(Long id) {
         return bookRepository.getById(id);
     }
+
+    public List<Book> getAllBooksWithCopies() {
+        return bookRepository.findAllWithCopies();
+    }   
 
     public Optional<Book> getBookByTitle(String title) {
         return bookRepository.findByTitle(title);
