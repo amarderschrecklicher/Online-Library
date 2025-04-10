@@ -13,4 +13,13 @@ public class ForumCommentMapper {
         dto.setCreatedAt(comment.getCreatedAt());
         return dto;
     }
+
+    public static ForumComment toEntity(ForumCommentDto dto) {
+        ForumComment comment = new ForumComment();
+        comment.setMemberId(dto.getMemberId());
+        comment.setContent(dto.getContent());
+        // forumPost se setuje posebno u servisu
+        return comment;
+    }
+
 }
