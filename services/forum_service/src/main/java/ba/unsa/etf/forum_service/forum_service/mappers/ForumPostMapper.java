@@ -13,4 +13,13 @@ public class ForumPostMapper {
         dto.setCreatedAt(post.getCreatedAt());
         return dto;
     }
+
+    public static ForumPost toEntity(ForumPostDto dto) {
+        ForumPost post = new ForumPost();
+        post.setMemberId(dto.getMemberId());
+        post.setTitle(dto.getTitle());
+        post.setContent(dto.getContent());
+        // createdAt se postavlja u servisu prilikom snimanja
+        return post;
+    }
 }

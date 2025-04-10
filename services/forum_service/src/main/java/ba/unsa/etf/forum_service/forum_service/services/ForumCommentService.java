@@ -1,5 +1,7 @@
 package ba.unsa.etf.forum_service.forum_service.services;
 
+import ba.unsa.etf.forum_service.forum_service.dtos.ForumCommentDto;
+import ba.unsa.etf.forum_service.forum_service.mappers.ForumCommentMapper;
 import ba.unsa.etf.forum_service.forum_service.models.ForumComment;
 import ba.unsa.etf.forum_service.forum_service.models.ForumPost;
 import ba.unsa.etf.forum_service.forum_service.repositories.ForumCommentRepository;
@@ -22,6 +24,15 @@ public class ForumCommentService {
         ForumPost post = forumPostRepository.findById(postId).orElseThrow();
         comment.setForumPost(post);
         comment.setCreatedAt(LocalDateTime.now());
+        return forumCommentRepository.save(comment);
+    }public ForumComment addComment(Long postId, ForumCommentDto commentDto) {
+        ForumPost post = forumPostRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Forum post not found"));
+
+        ForumComment comment = ForumCommentMapper.toEntity(commentDto);
+        comment.setForumPost(post);
+        comment.setCreatedAt(LocalDateTime.now());
+
         return forumCommentRepository.save(comment);
     }
 
