@@ -75,9 +75,19 @@ class BookController {
     }
 
     @DeleteMapping(path = "/{bookId}")
-    public void deleteBook(@PathVariable("bookId") Long bookId) {
+    public ResponseEntity<?> deleteBook(@PathVariable("bookId") Long bookId) {
         System.out.println("Delete called!");
-        bookService.deleteBook(bookId);
+        try{
+            bookService.deleteBook(bookId);
+            Map<String,String> response = new HashMap<>();
+            response.put("message","Book deleted successfully");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Failed to delete book.");
+            return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body(error);
+        }
+        
     }
 
 }

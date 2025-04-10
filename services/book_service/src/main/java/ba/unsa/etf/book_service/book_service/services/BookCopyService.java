@@ -36,7 +36,7 @@ public class BookCopyService {
     }
 
     public boolean existsByIsbn(String isbn) {
-        return bookCopyRepository.existsByIsbn(isbn);
+        return bookCopyRepository.existsByCode(isbn);
     }
 
     public BookCopy createBookCopy(BookCopyDto bookCopyDto) {
@@ -46,7 +46,7 @@ public class BookCopyService {
         }
 
         BookCopy copy = BookCopy.builder()
-            .isbn(bookCopyDto.getIsbn())
+            .code(bookCopyDto.getCode())
             .status(bookCopyDto.getStatus())
             .book(book.get())
             .build();
@@ -61,7 +61,7 @@ public class BookCopyService {
         }
 
         BookCopy existingCopy = optionalCopy.get();
-        existingCopy.setIsbn(updatedCopyDto.getIsbn());
+        existingCopy.setCode(updatedCopyDto.getCode());
         existingCopy.setStatus(updatedCopyDto.getStatus());
 
         Optional<Book> book = bookRepository.findById(updatedCopyDto.getBookId());

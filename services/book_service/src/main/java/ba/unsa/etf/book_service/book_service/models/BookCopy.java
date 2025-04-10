@@ -1,5 +1,6 @@
 package ba.unsa.etf.book_service.book_service.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,8 +34,9 @@ public class BookCopy {
     private Long id;
     @ManyToOne
     @JoinColumn(name="book_id")
-    private Book book; 
-    private String isbn;
+    private Book book;
+    @Column(unique = true, nullable = false) 
+    private String code;
     private String status;
     
 }

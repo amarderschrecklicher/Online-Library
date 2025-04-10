@@ -48,7 +48,7 @@ public class BookCopyController {
 
     @PutMapping("/{copyId}")
     public ResponseEntity<?> updateBookCopy(@PathVariable("copyId") Long id, @Valid @RequestBody BookCopyDto bookCopyDto) {
-        if (bookCopyService.existsByIsbn(bookCopyDto.getIsbn())) {
+        if (bookCopyService.existsByIsbn(bookCopyDto.getCode())) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Book copy with this ISBN already exists");
             return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body(error);
@@ -69,9 +69,19 @@ public class BookCopyController {
     }
 
     @DeleteMapping("/{copyId}")
-    public void deleteBookCopy(@PathVariable("copyId") Long id) {
+    public ResponseEntity<?> deleteBookCopy(@PathVariable("copyId") Long id) {
         System.out.println("Delete BookCopy called!");
-        bookCopyService.deleteBookCopy(id);
+        try{
+            bookCopyService.deleteBookCopy(id);
+            Map<String,String> response = new HashMap<>();
+            response.put("message","Book deleted successfully");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Failed to delete book.");
+            return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body(error);
+        }
+        
     }
 
 }

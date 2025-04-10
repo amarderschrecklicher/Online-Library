@@ -10,6 +10,6 @@ import ba.unsa.etf.book_service.book_service.models.BookCopy;
 @Repository
 public interface BookCopyRepository extends JpaRepository<BookCopy, Long> {
 
-    boolean existsByIsbn(String isbn);
+    boolean existsByCode(String code);
     Optional<BookCopy> findById(Long id);
 }

@@ -101,7 +101,7 @@ class BookServiceApplicationTests {
             .genre("Fiction")
             .publishedYear(2001L)
             .bookCopies(List.of(
-                BookCopy.builder().id(101L).isbn("ISBN-A1").status("AVAILABLE").build()
+                BookCopy.builder().id(101L).code("ISBN-A1").status("AVAILABLE").build()
             ))
             .build()
         );

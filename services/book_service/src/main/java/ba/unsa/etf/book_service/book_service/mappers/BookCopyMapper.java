@@ -8,7 +8,7 @@ public class BookCopyMapper {
     public static BookCopyDto toDto(BookCopy copy) {
         BookCopyDto dto = new BookCopyDto();
         dto.setId(copy.getId());
-        dto.setIsbn(copy.getIsbn());
+        dto.setCode(copy.getCode());
         dto.setStatus(copy.getStatus());
         dto.setBookId(copy.getBook().getId());
         return dto;
