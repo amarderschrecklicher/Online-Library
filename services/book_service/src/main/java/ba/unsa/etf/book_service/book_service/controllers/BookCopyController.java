@@ -36,9 +36,9 @@ public class BookCopyController {
     public ResponseEntity<?> createBookCopy(@Valid @RequestBody BookCopyDto bookCopyDto) {
         System.out.println("Creating new BookCopy!");
 
-        if (bookCopyService.existsByIsbn(null)) {
+        if (bookCopyService.existsByCode(null)) {
             Map<String, String> error = new HashMap<>();
-            error.put("error", "Book copy with this ISBN already exists");
+            error.put("error", "Book copy with this Code already exists");
             return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body(error);
         }
 
@@ -48,9 +48,9 @@ public class BookCopyController {
 
     @PutMapping("/{copyId}")
     public ResponseEntity<?> updateBookCopy(@PathVariable("copyId") Long id, @Valid @RequestBody BookCopyDto bookCopyDto) {
-        if (bookCopyService.existsByIsbn(bookCopyDto.getCode())) {
+        if (bookCopyService.existsByCode(bookCopyDto.getCode())) {
             Map<String, String> error = new HashMap<>();
-            error.put("error", "Book copy with this ISBN already exists");
+            error.put("error", "Book copy with this Code already exists");
             return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body(error);
         }
 
@@ -83,5 +83,26 @@ public class BookCopyController {
         }
         
     }
+
+    @PatchMapping("/{copyId}/status")
+    public ResponseEntity<?> updateBookCopyStatus(@PathVariable Long copyId, @RequestBody Map<String, String> payload) {
+        String newStatus = payload.get("status");
+    
+        if (newStatus == null || newStatus.trim().isEmpty()) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Status is required");
+            return ResponseEntity.badRequest().body(error);
+        }
+    
+        BookCopy updatedCopy = bookCopyService.updateStatus(copyId, newStatus);
+    
+        if (updatedCopy == null) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Book copy with ID " + copyId + " not found");
+            return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body(error);
+        }
+    
+        return ResponseEntity.ok(updatedCopy);
+    }    
 
 }

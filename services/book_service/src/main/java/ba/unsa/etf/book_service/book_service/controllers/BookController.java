@@ -7,6 +7,10 @@ import jakarta.validation.Valid;
 
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +34,17 @@ class BookController {
     public List<Book> getAllBooks() {
         return bookService.GetAllBooks();
     }
+    
+    
+    @GetMapping("/paged")
+    public Page<Book> getAllBooksPaged(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(defaultValue = "title") String sortBy
+    ) {
+        return bookService.getAllBooksPaged(page, size, sortBy);
+    }
+    
 
     @PostMapping
     public ResponseEntity<?> createBook(@Valid @RequestBody BookDto bookDto) {

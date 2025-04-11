@@ -35,7 +35,7 @@ public class BookCopyService {
         return bookCopyRepository.findById(id);
     }
 
-    public boolean existsByIsbn(String isbn) {
+    public boolean existsByCode(String isbn) {
         return bookCopyRepository.existsByCode(isbn);
     }
 
@@ -72,5 +72,14 @@ public class BookCopyService {
 
     public void deleteBookCopy(Long id) {
         bookCopyRepository.deleteById(id);
+    }
+    
+    public BookCopy updateStatus(Long id, String newStatus) {
+        Optional<BookCopy> optionalCopy = bookCopyRepository.findById(id);
+        if (optionalCopy.isEmpty()) return null;
+    
+        BookCopy copy = optionalCopy.get();
+        copy.setStatus(newStatus);
+        return bookCopyRepository.save(copy);
     }    
 }
