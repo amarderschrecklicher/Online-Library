@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 import ba.unsa.etf.book_service.book_service.models.Book;
+import ba.unsa.etf.book_service.book_service.models.BookCopy;
 import ba.unsa.etf.book_service.book_service.repositories.BookRepository;
 import ba.unsa.etf.book_service.book_service.services.BookService;
 
@@ -88,4 +89,30 @@ class BookServiceApplicationTests {
 
         verify(bookRepository, times(1)).deleteById(bookId);
     }
+
+
+    @Test
+        void shouldReturnBooksWithCopiesUsingFetchJoin() {
+        List<Book> books = List.of(
+        Book.builder()
+            .id(1L)
+            .title("Book A")
+            .author("Author A")
+            .genre("Fiction")
+            .publishedYear(2001L)
+            .bookCopies(List.of(
+                BookCopy.builder().id(101L).code("ISBN-A1").status("AVAILABLE").build()
+            ))
+            .build()
+        );
+
+        when(bookRepository.findAllWithCopies()).thenReturn(books);
+
+        List<Book> result = bookService.getAllBooksWithCopies();
+
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getBookCopies()).hasSize(1);
+        verify(bookRepository, times(1)).findAllWithCopies();
+    }
+
 }

@@ -2,6 +2,7 @@ package ba.unsa.etf.book_service.book_service.models;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,7 +37,7 @@ public class Book {
     private String author;
     private String genre;   
     private Long publishedYear;
-    @OneToMany
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookCopy> bookCopies;
 
 }
