@@ -1,14 +1,9 @@
 package ba.unsa.etf.membership_service.membership_service.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -29,4 +24,8 @@ public class Loan {
     private LocalDateTime returnDate;
     private LocalDateTime dueDate;
     private Boolean returned;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberId", referencedColumnName = "id", insertable = false, updatable = false)
+    private Member member;
 }
