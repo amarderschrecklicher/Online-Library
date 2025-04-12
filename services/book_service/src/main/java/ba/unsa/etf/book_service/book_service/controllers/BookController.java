@@ -7,13 +7,17 @@ import jakarta.validation.Valid;
 
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +26,12 @@ import java.util.Map;
 @RequestMapping("/api/v1/book")
 @CrossOrigin
 class BookController {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Value("${eureka.instance.instance-id}")
+    private String instanceId;
 
     private final BookService bookService;
 
@@ -103,6 +113,17 @@ class BookController {
             return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body(error);
         }
         
+    }
+
+    @GetMapping("/whoami")
+    public String whoami() throws UnknownHostException {
+        return "Book-service response from: " + instanceId;
+    }
+
+    @GetMapping("/self-test")
+        public String selfLoadBalancedCall() {
+        String response = restTemplate.getForObject("http://book-service/api/v1/book/whoami", String.class);
+        return "Self-called: " + response;
     }
 
 }

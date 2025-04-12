@@ -22,7 +22,8 @@ eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
-
+  instance:
+    instance-id: book-service-1
 server:
   port: 8081
 

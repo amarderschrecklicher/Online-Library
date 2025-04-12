@@ -10,11 +10,9 @@ import org.hibernate.Session;
 import org.hibernate.stat.Statistics;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -38,7 +36,7 @@ public class BookNPlusOneTest {
     @Transactional
     public void testBooksWithCopies_ShouldAvoidNPlusOne() {
 
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 23; i++) {
             Book book = Book.builder()
                     .title("Book " + i)
                     .author("Author " + i)
@@ -49,7 +47,7 @@ public class BookNPlusOneTest {
             book = bookRepository.save(book);
 
             // Two copies for each book
-            for (int j = 1; j <= 2; j++) {
+            for (int j = 1; j <= 12; j++) {
                 BookCopy copy = BookCopy.builder()
                         .code("B" + i + "-C" + j)
                         .status("AVAILABLE")
@@ -66,13 +64,13 @@ public class BookNPlusOneTest {
         Statistics statistics = session.getSessionFactory().getStatistics();
         statistics.clear();
 
-        List<Book> books = bookRepository.findAllWithCopies(); // This should have a JOIN FETCH
+        List<Book> books = bookRepository.findAllWithCopies(); // JOIN FETCH
 
         // Force loading of book copies
         books.forEach(book -> book.getBookCopies().size());
 
         long queryCount = statistics.getPrepareStatementCount();
         System.out.println("Queries executed: " + queryCount);
-        assertTrue(queryCount <= 2, "Expected max 2 queries, but got: " + queryCount);
+        assertTrue(queryCount <= 1, "Expected max 2 queries, but got: " + queryCount);
     }
 }
