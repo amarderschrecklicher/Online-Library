@@ -26,13 +26,13 @@ import java.util.Map;
 @RequestMapping("/api/v1/book")
 @CrossOrigin
 class BookController {
-
+/* 
     @Autowired
     private RestTemplate restTemplate;
 
     @Value("${eureka.instance.instance-id}")
     private String instanceId;
-
+*/
     private final BookService bookService;
 
     @Autowired
@@ -114,7 +114,7 @@ class BookController {
         }
         
     }
-
+/* 
     @GetMapping("/whoami")
     public String whoami() throws UnknownHostException {
         return "Book-service response from: " + instanceId;
@@ -125,5 +125,5 @@ class BookController {
         String response = restTemplate.getForObject("http://book-service/api/v1/book/whoami", String.class);
         return "Self-called: " + response;
     }
-
+*/
 }
