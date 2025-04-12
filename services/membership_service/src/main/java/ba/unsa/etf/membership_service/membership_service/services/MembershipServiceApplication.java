@@ -1,4 +1,4 @@
-package ba.unsa.etf.membership_service.membership_service;
+package ba.unsa.etf.membership_service.membership_service.services;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MembershipServiceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MembershipServiceApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(MembershipServiceApplication.class, args);
+    }
 }
