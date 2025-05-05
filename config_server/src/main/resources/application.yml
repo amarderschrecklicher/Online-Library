@@ -11,5 +11,8 @@ spring:
         native:
           search-locations: file:./config_repo
 
-  datasource:
-    driver-class-name: none
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

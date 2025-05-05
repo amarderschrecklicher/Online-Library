@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   mysql:
     image: mysql:8.0
@@ -20,6 +22,11 @@ services:
       - ./config_repo:/config_repo
     networks:
       - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   eureka-server:
     build: ./eureka
@@ -43,41 +50,32 @@ services:
     restart: on-failure
     networks:
       - backend
-      
 
-#  book-service-1:
-#    build: ./services/book_service
-#    container_name: book-service-1
-#    ports:
-#      - "8082:8081"
-#    environment:
-#      SPRING_PROFILES_ACTIVE: instance1
-#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bookdb
-#      SPRING_DATASOURCE_USERNAME: root
-#      SPRING_DATASOURCE_PASSWORD: admin
-#      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-#    networks:
-#      - backend
-#    depends_on:
-#      - mysql
-#      - eureka-server
+  membership-service:
+    build: ./services/membership_service
+    container_name: membership-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mysql
+      - eureka-server
+      - config-server
+    restart: on-failure
+    networks:
+      - backend
 
-#  book-service-2:
-#    build: ./services/book_service
-#    container_name: book-service-2
-#    ports:
-#      - "8083:8081" 
-#    environment:
-#      SPRING_PROFILES_ACTIVE: instance2
-#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bookdb
-#      SPRING_DATASOURCE_USERNAME: root
-#      SPRING_DATASOURCE_PASSWORD: admin
-#      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-#    networks:
-#      - backend
-#    depends_on:
-#      - mysql
-#      - eureka-server      
+  forum-service:
+    build: ./services/forum_service
+    container_name: forum-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mysql
+      - eureka-server
+      - config-server
+    restart: on-failure
+    networks:
+      - backend
 
 networks:
   backend:
