@@ -10,3 +10,7 @@ eureka:
       defaultZone: http://eureka-server:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
+
+book:
+  service:
+    url: http://book-service:8081

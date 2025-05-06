@@ -27,11 +27,11 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public List<Book> GetAllBooks() {
+    public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }
 
-    public Book GetBookById(Long id) {
+    public Book getBookById(Long id) {
         return bookRepository.getById(id);
     }
 

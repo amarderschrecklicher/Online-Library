@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface LoanRepository extends JpaRepository<Loan, Long> {
     List<Loan> findByMemberId(Long memberId);
+    Boolean existsByBookCopyId(Long bookCopyId);
 }

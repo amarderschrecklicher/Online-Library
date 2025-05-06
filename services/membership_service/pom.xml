@@ -118,8 +118,14 @@
 			<version>17.0.0</version>
 			<scope>compile</scope>
 		</dependency>
+        <dependency>
+            <groupId>ba.unsa.etf.book_service</groupId>
+            <artifactId>book_service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>

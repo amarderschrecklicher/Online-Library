@@ -1,4 +1,4 @@
-package ba.unsa.etf.membership_service.membership_service.services;
+package ba.unsa.etf.membership_service.membership_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
