@@ -13,6 +13,21 @@ services:
     networks:
       - backend
 
+  config-server:
+    build: ./config_server
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./config_repo:/config_repo
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   eureka-server:
     build: ./eureka
     container_name: eureka-server
@@ -28,30 +43,11 @@ services:
     container_name: book-service
     ports:
       - "8081:8081"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bookdb
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: admin
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     depends_on:
       - mysql
       - eureka-server
-    networks:
-      - backend
-
-  forum-service:
-    build: ./services/forum_service
-    container_name: forum-service
-    ports:
-      - "8082:8082"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bookdb
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: admin
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-    depends_on:
-      - mysql
-      - eureka-server
+      - config-server
+    restart: on-failure
     networks:
       - backend
 
@@ -59,15 +55,25 @@ services:
     build: ./services/membership_service
     container_name: membership-service
     ports:
-      - "8083:8083"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bookdb
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: admin
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      - "8082:8082"
     depends_on:
       - mysql
       - eureka-server
+      - config-server
+    restart: on-failure
+    networks:
+      - backend
+
+  forum-service:
+    build: ./services/forum_service
+    container_name: forum-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mysql
+      - eureka-server
+      - config-server
+    restart: on-failure
     networks:
       - backend
 

@@ -9,8 +9,8 @@ import lombok.Data;
 public class BookCopyDto {
     private Long id;
     @NotNull(message = "Number is required")
-    @Min(value = 1, message = "Number must be at least 1")
-    private Long number;
+    @Min(value = 1, message = "Code must be at least 1")
+    private String code;
     @NotBlank(message = "Status is required")
     private String status;
     @NotNull(message = "Book ID is required")

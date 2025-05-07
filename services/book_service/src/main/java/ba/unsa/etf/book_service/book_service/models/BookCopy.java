@@ -1,5 +1,6 @@
 package ba.unsa.etf.book_service.book_service.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,9 +10,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Entity
 @Table(name="book_copies")
 @Data
@@ -31,8 +34,9 @@ public class BookCopy {
     private Long id;
     @ManyToOne
     @JoinColumn(name="book_id")
-    private Book book; 
-    private Long number;
+    private Book book;
+    @Column(unique = true, nullable = false) 
+    private String code;
     private String status;
     
 }

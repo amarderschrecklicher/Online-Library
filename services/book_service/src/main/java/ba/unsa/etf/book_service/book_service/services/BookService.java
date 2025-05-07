@@ -1,10 +1,13 @@
 package ba.unsa.etf.book_service.book_service.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import ba.unsa.etf.book_service.book_service.dtos.BookDto;
-import ba.unsa.etf.book_service.book_service.mappers.BookMapper;
 import ba.unsa.etf.book_service.book_service.models.Book;
 import ba.unsa.etf.book_service.book_service.repositories.BookRepository;
 import jakarta.transaction.Transactional;
@@ -24,13 +27,17 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public List<Book> GetAllBooks() {
+    public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }
 
-    public Book GetBookById(Long id) {
+    public Book getBookById(Long id) {
         return bookRepository.getById(id);
     }
+
+    public List<Book> getAllBooksWithCopies() {
+        return bookRepository.findAllWithCopies();
+    }   
 
     public Optional<Book> getBookByTitle(String title) {
         return bookRepository.findByTitle(title);
@@ -73,6 +80,12 @@ public class BookService {
 
         bookRepository.deleteById(id);
     }
+
+    public Page<Book> getAllBooksPaged(int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        return bookRepository.findAll(pageable);
+    }
+
 
 
 }
