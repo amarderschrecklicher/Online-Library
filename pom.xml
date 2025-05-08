@@ -15,6 +15,7 @@
         <module>services/membership_service</module>
         <module>eureka</module>
         <module>config_server</module>
+        <module>system_events_service</module>
     </modules>
 
     <properties>
