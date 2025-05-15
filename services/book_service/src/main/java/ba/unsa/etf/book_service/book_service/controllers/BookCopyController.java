@@ -1,6 +1,7 @@
 package ba.unsa.etf.book_service.book_service.controllers;
 
 import ba.unsa.etf.book_service.book_service.dtos.BookCopyDto;
+import ba.unsa.etf.book_service.book_service.mappers.BookCopyMapper;
 import ba.unsa.etf.book_service.book_service.models.BookCopy;
 import ba.unsa.etf.book_service.book_service.services.BookCopyService;
 
@@ -13,6 +14,7 @@ import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @RestController
@@ -28,22 +30,37 @@ public class BookCopyController {
     }
 
     @GetMapping
-    public List<BookCopy> getAllBookCopies() {
+    public List<BookCopyDto> getAllBookCopies() {
         return bookCopyService.getAllBookCopies();
+    }
+
+    @GetMapping("/{title}")
+    public ResponseEntity<?> getFirstAvailableCopyByTitle(@PathVariable("title") String title) {
+        Optional<BookCopyDto> bookCopy = bookCopyService.getFirstAvailableCopyByTitle(title);
+        if (bookCopy.isEmpty()) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "No book copy found with title " + title);
+            return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body(error);
+        }
+        return ResponseEntity.ok().body(bookCopy);
     }
 
     @PostMapping
     public ResponseEntity<?> createBookCopy(@Valid @RequestBody BookCopyDto bookCopyDto) {
-        System.out.println("Creating new BookCopy!");
-
-        if (bookCopyService.existsByCode(null)) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "Book copy with this Code already exists");
-            return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body(error);
-        }
+        System.out.println("Creating new BookCopy1!");
 
         BookCopy newBookCopy = bookCopyService.createBookCopy(bookCopyDto);
-        return ResponseEntity.ok().body(newBookCopy);
+
+        return ResponseEntity.ok().body(BookCopyMapper.toDto(newBookCopy));
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createBookCopyByTitle(@Valid @RequestBody String bookTitle) {
+        System.out.println("Creating new BookCopy2!");
+
+        BookCopy newBookCopy = bookCopyService.createBookCopyByTitle(bookTitle);
+        System.out.println(BookCopyMapper.toDto(newBookCopy));
+        return ResponseEntity.ok().body(BookCopyMapper.toDto(newBookCopy));
     }
 
     @PutMapping("/{copyId}")
@@ -85,10 +102,10 @@ public class BookCopyController {
     }
 
     @PatchMapping("/{copyId}/status")
-    public ResponseEntity<?> updateBookCopyStatus(@PathVariable Long copyId, @RequestBody Map<String, String> payload) {
-        String newStatus = payload.get("status");
+    public ResponseEntity<?> updateBookCopyStatus(@PathVariable Long copyId, @RequestBody Map<String, Boolean> payload) {
+        Boolean newStatus = payload.get("status");
     
-        if (newStatus == null || newStatus.trim().isEmpty()) {
+        if (newStatus == null ) {
             Map<String, String> error = new HashMap<>();
             error.put("error", "Status is required");
             return ResponseEntity.badRequest().body(error);

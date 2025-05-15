@@ -1,5 +1,6 @@
 package ba.unsa.etf.book_service.book_service.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,9 +35,10 @@ public class BookCopy {
     private Long id;
     @ManyToOne
     @JoinColumn(name="book_id")
+    @JsonBackReference
     private Book book;
     @Column(unique = true, nullable = false) 
     private String code;
-    private String status;
+    private Boolean available;
     
 }

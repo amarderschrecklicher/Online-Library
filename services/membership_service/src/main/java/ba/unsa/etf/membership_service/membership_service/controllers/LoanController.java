@@ -2,7 +2,6 @@ package ba.unsa.etf.membership_service.membership_service.controllers;
 
 import ba.unsa.etf.membership_service.membership_service.dtos.LoanDto;
 import ba.unsa.etf.membership_service.membership_service.models.Loan;
-import ba.unsa.etf.membership_service.membership_service.repositories.LoanRepository;
 
 import ba.unsa.etf.membership_service.membership_service.services.LoanService;
 import jakarta.validation.Valid;
@@ -10,13 +9,10 @@ import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/loans")

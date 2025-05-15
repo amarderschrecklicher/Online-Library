@@ -2,6 +2,7 @@ package ba.unsa.etf.book_service.book_service.services;
 
 
 import ba.unsa.etf.book_service.book_service.dtos.BookCopyDto;
+import ba.unsa.etf.book_service.book_service.mappers.BookCopyMapper;
 import ba.unsa.etf.book_service.book_service.models.Book;
 import ba.unsa.etf.book_service.book_service.models.BookCopy;
 import ba.unsa.etf.book_service.book_service.repositories.BookCopyRepository;
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -27,12 +31,26 @@ public class BookCopyService {
         this.bookRepository = bookRepository;
     }
 
-    public List<BookCopy> getAllBookCopies() {
-        return bookCopyRepository.findAll();
+    public String generateCode() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+        String timestamp = LocalDateTime.now().format(formatter);
+        String randomPart = UUID.randomUUID().toString().substring(0, 6).toUpperCase(); // 6 random alphanumeric chars
+        return timestamp + "-" + randomPart;
+    }
+
+    public List<BookCopyDto> getAllBookCopies() {
+        List<BookCopy> bookCopies = bookCopyRepository.findAll();
+        return BookCopyMapper.toDto(bookCopies);
     }
 
     public Optional<BookCopy> getBookCopyById(Long id) {
         return bookCopyRepository.findById(id);
+    }
+
+    public Optional<BookCopyDto> getFirstAvailableCopyByTitle(String title) {
+        Optional<BookCopy> bookCopy =  bookCopyRepository.findFirstByBook_TitleAndAvailableTrue(title);
+        return bookCopy.map(BookCopyMapper::toDto);
+
     }
 
     public boolean existsByCode(String isbn) {
@@ -46,10 +64,28 @@ public class BookCopyService {
         }
 
         BookCopy copy = BookCopy.builder()
-            .code(bookCopyDto.getCode())
-            .status(bookCopyDto.getStatus())
+            .code(generateCode())
+            .available(true)
             .book(book.get())
             .build();
+
+        return bookCopyRepository.save(copy);
+    }
+
+    public BookCopy createBookCopyByTitle(String bookTitle) {
+
+        if (bookRepository.existsByTitle(bookTitle)) {
+            throw new IllegalArgumentException("Book with title " + bookTitle + " does not exist.");
+        }
+
+        Optional<Book> book = bookRepository.findByTitle(bookTitle);
+
+
+        BookCopy copy = BookCopy.builder()
+                .code(generateCode())
+                .available(false)
+                .book(book.get())
+                .build();
 
         return bookCopyRepository.save(copy);
     }
@@ -62,7 +98,7 @@ public class BookCopyService {
 
         BookCopy existingCopy = optionalCopy.get();
         existingCopy.setCode(updatedCopyDto.getCode());
-        existingCopy.setStatus(updatedCopyDto.getStatus());
+        existingCopy.setAvailable(updatedCopyDto.getAvailable());
 
         Optional<Book> book = bookRepository.findById(updatedCopyDto.getBookId());
         book.ifPresent(existingCopy::setBook);
@@ -74,12 +110,12 @@ public class BookCopyService {
         bookCopyRepository.deleteById(id);
     }
     
-    public BookCopy updateStatus(Long id, String newStatus) {
+    public BookCopy updateStatus(Long id, Boolean newAvailable) {
         Optional<BookCopy> optionalCopy = bookCopyRepository.findById(id);
         if (optionalCopy.isEmpty()) return null;
     
         BookCopy copy = optionalCopy.get();
-        copy.setStatus(newStatus);
+        copy.setAvailable(newAvailable);
         return bookCopyRepository.save(copy);
     }    
 }

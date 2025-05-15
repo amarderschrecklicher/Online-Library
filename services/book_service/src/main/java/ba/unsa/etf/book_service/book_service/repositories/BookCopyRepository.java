@@ -12,4 +12,7 @@ public interface BookCopyRepository extends JpaRepository<BookCopy, Long> {
 
     boolean existsByCode(String code);
     Optional<BookCopy> findById(Long id);
+    Optional<BookCopy> findFirstByBook_TitleAndAvailableTrue(String title);
+
+
 }

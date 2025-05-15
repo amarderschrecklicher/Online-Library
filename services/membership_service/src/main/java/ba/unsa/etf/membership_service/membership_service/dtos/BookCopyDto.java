@@ -1,7 +1,6 @@
-package ba.unsa.etf.book_service.book_service.dtos;
+package ba.unsa.etf.membership_service.membership_service.dtos;
 
 import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

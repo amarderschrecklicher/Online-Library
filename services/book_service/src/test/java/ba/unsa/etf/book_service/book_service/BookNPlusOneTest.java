@@ -50,7 +50,7 @@ public class BookNPlusOneTest {
             for (int j = 1; j <= 12; j++) {
                 BookCopy copy = BookCopy.builder()
                         .code("B" + i + "-C" + j)
-                        .status("AVAILABLE")
+                        .available(true)
                         .book(book)
                         .build();
 
