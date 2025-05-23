@@ -44,8 +44,7 @@ public class LoanController {
                 loanDto.getBookCopyId(),
                 loanDto.getLoanDate(),
                 loanDto.getReturnDate(),
-                loanDto.getDueDate(),
-                loanDto.getReturned()
+                loanDto.getDueDate()
         );
         return ResponseEntity.status(HttpStatus.SC_CREATED).body(newLoan);
     }

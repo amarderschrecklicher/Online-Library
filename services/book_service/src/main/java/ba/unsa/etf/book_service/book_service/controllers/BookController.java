@@ -41,6 +41,11 @@ class BookController {
     public List<Book> getAllBooks() {
         return bookService.getAllBooks();
     }
+
+    @GetMapping
+    public Book getBookById(@RequestParam Long id) {
+        return bookService.getBookById(id);
+    }
     
     
     @GetMapping("/paged")

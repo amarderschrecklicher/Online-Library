@@ -1,7 +1,10 @@
 package ba.unsa.etf.book_service.book_service.controllers;
 
 import ba.unsa.etf.book_service.book_service.dtos.BookCopyDto;
+import ba.unsa.etf.book_service.book_service.dtos.BookDto;
 import ba.unsa.etf.book_service.book_service.mappers.BookCopyMapper;
+import ba.unsa.etf.book_service.book_service.mappers.BookMapper;
+import ba.unsa.etf.book_service.book_service.models.Book;
 import ba.unsa.etf.book_service.book_service.models.BookCopy;
 import ba.unsa.etf.book_service.book_service.services.BookCopyService;
 
@@ -32,6 +35,18 @@ public class BookCopyController {
     @GetMapping
     public List<BookCopyDto> getAllBookCopies() {
         return bookCopyService.getAllBookCopies();
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getBookCopyById(@RequestParam Long id) {
+        Optional<BookCopy> bookCopy = bookCopyService.getBookCopyById(id);
+        if (bookCopy.isEmpty()) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "No book copy found with ID " + id);
+            return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body(error);
+        }
+        BookDto book = BookMapper.toDto(bookCopy.get().getBook());
+        return ResponseEntity.ok().body(book);
     }
 
     @GetMapping("/{title}")

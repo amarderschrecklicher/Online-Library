@@ -1,5 +1,6 @@
 package ba.unsa.etf.membership_service.membership_service.services;
 
+import ba.unsa.etf.book_service.book_service.dtos.BookDto;
 import ba.unsa.etf.membership_service.membership_service.dtos.BookCopyDto;
 import ba.unsa.etf.membership_service.membership_service.dtos.LoanDto;
 import ba.unsa.etf.membership_service.membership_service.models.Loan;
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -36,42 +39,38 @@ public class LoanService {
 
     public Boolean existsByBookCopyId(Long id) {return loanRepository.existsByBookCopyId(id);}
 
-    public Loan createLoan(Long memberId, Long bookCopyId, LocalDateTime loanDate, LocalDateTime returnDate, LocalDateTime dueDate, Boolean returned) {
+    public Loan createLoan(Long memberId, Long bookCopyId, LocalDateTime loanDate, LocalDateTime returnDate, LocalDateTime dueDate) {
 
         Loan loan = Loan.builder().memberId(memberId)
                 .bookCopyId(bookCopyId)
                 .loanDate(loanDate)
                 .returnDate(returnDate)
                 .dueDate(dueDate)
-                .returned(returned).build();
+                .returned(false).build();
         Loan savedLoan = loanRepository.save(loan);
         return loan;
     }
 
-    public Loan CreateLoan(String memberName, String bookTitle, LocalDateTime loanDate, LocalDateTime returnDate, LocalDateTime dueDate, Boolean returned) {
-        Optional<Member> memberOpt = memberService.findByUsername(memberName);
-        if (memberOpt.isEmpty()) {
-            throw new RuntimeException("Member not found: " + memberName);
-        }
-
-        Member member = memberOpt.get();
-
-        String url = "http://book-service/api/v1/book-copy/" + bookTitle;
-        ResponseEntity<BookCopyDto> response = restTemplate.getForEntity(url, BookCopyDto.class);
-        BookCopyDto bookCopy = response.getBody();
+    public Map<String, Object> getLoanData(Long longiD ) {
+        Loan loan = getLoanById(longiD);
 
 
-        Loan loan = Loan.builder()
-                .memberId(member.getId())
-                .bookCopyId(bookCopy.getId())
-                .loanDate(loanDate)
-                .returnDate(returnDate)
-                .dueDate(dueDate)
-                .returned(returned)
-                .build();
+        String url = "http://book-service/api/v1/book-COPY?id=" + loan.getBookCopyId();
+        ResponseEntity<BookDto> response = restTemplate.getForEntity(url, BookDto.class);
+        BookDto book = response.getBody();
 
-        return loanRepository.save(loan);
+        Member member = memberService.getMemberById(loan.getMemberId());
+
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("loan", loan);
+        result.put("book", book);
+        result.put("member", member);
+        
+        return result;
     }
+
+
 
     public Loan updateLoan(Long id, LoanDto loanDto) {
         Loan existingLoan = loanRepository.getById(id);
