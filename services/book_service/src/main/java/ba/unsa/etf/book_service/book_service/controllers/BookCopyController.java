@@ -37,8 +37,8 @@ public class BookCopyController {
         return bookCopyService.getAllBookCopies();
     }
 
-    @GetMapping
-    public ResponseEntity<?> getBookCopyById(@RequestParam Long id) {
+    @GetMapping(path = "/id/{bookId}")
+    public ResponseEntity<?> getBookCopyById(@PathVariable("bookId") Long id) {
         Optional<BookCopy> bookCopy = bookCopyService.getBookCopyById(id);
         if (bookCopy.isEmpty()) {
             Map<String, String> error = new HashMap<>();
@@ -49,7 +49,7 @@ public class BookCopyController {
         return ResponseEntity.ok().body(book);
     }
 
-    @GetMapping("/{title}")
+    @GetMapping("/title/{title}")
     public ResponseEntity<?> getFirstAvailableCopyByTitle(@PathVariable("title") String title) {
         Optional<BookCopyDto> bookCopy = bookCopyService.getFirstAvailableCopyByTitle(title);
         if (bookCopy.isEmpty()) {

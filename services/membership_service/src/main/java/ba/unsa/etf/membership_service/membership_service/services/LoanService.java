@@ -1,8 +1,11 @@
 package ba.unsa.etf.membership_service.membership_service.services;
 
-import ba.unsa.etf.book_service.book_service.dtos.BookDto;
+import ba.unsa.etf.membership_service.membership_service.dtos.BookDto;
 import ba.unsa.etf.membership_service.membership_service.dtos.BookCopyDto;
 import ba.unsa.etf.membership_service.membership_service.dtos.LoanDto;
+import ba.unsa.etf.membership_service.membership_service.dtos.MemberDto;
+import ba.unsa.etf.membership_service.membership_service.mappers.LoanMapper;
+import ba.unsa.etf.membership_service.membership_service.mappers.MemberMapper;
 import ba.unsa.etf.membership_service.membership_service.models.Loan;
 import ba.unsa.etf.membership_service.membership_service.models.Member;
 import ba.unsa.etf.membership_service.membership_service.repositories.LoanRepository;
@@ -16,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -39,6 +41,8 @@ public class LoanService {
 
     public Boolean existsByBookCopyId(Long id) {return loanRepository.existsByBookCopyId(id);}
 
+    public boolean existsById(Long id) {return loanRepository.existsById(id);}
+
     public Loan createLoan(Long memberId, Long bookCopyId, LocalDateTime loanDate, LocalDateTime returnDate, LocalDateTime dueDate) {
 
         Loan loan = Loan.builder().memberId(memberId)
@@ -51,22 +55,22 @@ public class LoanService {
         return loan;
     }
 
-    public Map<String, Object> getLoanData(Long longiD ) {
-        Loan loan = getLoanById(longiD);
+    public Map<String, Object> getLoanData(Long longiD) {
+        LoanDto loan = LoanMapper.toDto(getLoanById(longiD));
 
 
-        String url = "http://book-service/api/v1/book-COPY?id=" + loan.getBookCopyId();
-        ResponseEntity<BookDto> response = restTemplate.getForEntity(url, BookDto.class);
-        BookDto book = response.getBody();
+        String url = "http://book-service/api/v1/book-copy/id/" + loan.getBookCopyId();
+        BookDto book = restTemplate.getForObject(url,BookDto.class);
 
-        Member member = memberService.getMemberById(loan.getMemberId());
+        System.out.println(book);
+        MemberDto member = MemberMapper.toDto(memberService.getMemberById(loan.getMemberId()));
 
 
         Map<String, Object> result = new HashMap<>();
         result.put("loan", loan);
         result.put("book", book);
         result.put("member", member);
-        
+
         return result;
     }
 

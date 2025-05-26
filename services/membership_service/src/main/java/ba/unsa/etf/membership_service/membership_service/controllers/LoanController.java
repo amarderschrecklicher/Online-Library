@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @RestController
-@RequestMapping("/api/v1/loans")
+@RequestMapping("/api/v1/loan")
 @CrossOrigin
 public class LoanController {
 
@@ -29,6 +30,17 @@ public class LoanController {
     @GetMapping
     public List<Loan> getAllLoans() {
         return loanService.getLoans();
+    }
+
+    @GetMapping("/{longId}")
+    public ResponseEntity<?> getLoanData(@PathVariable("longId") Long longId) {
+        if(!loanService.existsById(longId)) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Loan does not exist");
+            return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body(error);
+        }
+        Map<String,Object> map = loanService.getLoanData(longId);
+        return ResponseEntity.ok(map);
     }
 
     @PostMapping
@@ -49,7 +61,7 @@ public class LoanController {
         return ResponseEntity.status(HttpStatus.SC_CREATED).body(newLoan);
     }
 
-    @PutMapping(path = "/loanId")
+    @PutMapping(path = "/{loanId}")
     public ResponseEntity<?> updateLoan(@PathVariable("loanId") Long id, @Valid @RequestBody LoanDto updatedLoanData){
         if(loanService.existsByBookCopyId(updatedLoanData.getBookCopyId())) {
             Map<String, String> error = new HashMap<>();
@@ -71,7 +83,7 @@ public class LoanController {
 
     }
 
-    @DeleteMapping(path="loanId")
+    @DeleteMapping(path="/{loanId}")
     public ResponseEntity<?> deleteLoan(@PathVariable("loanId") Long id){
         System.out.println("Delete called!");
         try{

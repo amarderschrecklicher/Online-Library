@@ -10,4 +10,5 @@ import java.util.List;
 public interface LoanRepository extends JpaRepository<Loan, Long> {
     List<Loan> findByMemberId(Long memberId);
     Boolean existsByBookCopyId(Long bookCopyId);
+    boolean existsById(Long id);
 }
