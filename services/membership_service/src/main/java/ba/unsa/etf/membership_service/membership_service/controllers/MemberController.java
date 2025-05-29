@@ -1,6 +1,7 @@
 package ba.unsa.etf.membership_service.membership_service.controllers;
 
 import ba.unsa.etf.membership_service.membership_service.dtos.MemberDto;
+import ba.unsa.etf.membership_service.membership_service.mappers.MemberMapper;
 import ba.unsa.etf.membership_service.membership_service.models.Member;
 import ba.unsa.etf.membership_service.membership_service.services.MemberService;
 import org.apache.http.HttpStatus;
@@ -40,7 +41,7 @@ public class MemberController {
                 memberDto.getStatus()
         );
 
-        return ResponseEntity.ok().body(newMember);
+        return ResponseEntity.ok().body(MemberMapper.toDto(newMember) );
     }
 
     @PutMapping(path = "/{memberId}")
@@ -57,7 +58,7 @@ public class MemberController {
                 return ResponseEntity.notFound().build();
             }
 
-            return ResponseEntity.ok(updatedMember);
+            return ResponseEntity.ok(MemberMapper.toDto(updatedMember));
         }catch (Exception e){
             Map<String, String> error = new HashMap<>();
             error.put("error", "Internal server error");

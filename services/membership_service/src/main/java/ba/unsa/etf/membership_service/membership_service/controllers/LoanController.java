@@ -1,6 +1,7 @@
 package ba.unsa.etf.membership_service.membership_service.controllers;
 
 import ba.unsa.etf.membership_service.membership_service.dtos.LoanDto;
+import ba.unsa.etf.membership_service.membership_service.mappers.LoanMapper;
 import ba.unsa.etf.membership_service.membership_service.models.Loan;
 
 import ba.unsa.etf.membership_service.membership_service.services.LoanService;
@@ -58,7 +59,7 @@ public class LoanController {
                 loanDto.getReturnDate(),
                 loanDto.getDueDate()
         );
-        return ResponseEntity.status(HttpStatus.SC_CREATED).body(newLoan);
+        return ResponseEntity.status(HttpStatus.SC_CREATED).body(LoanMapper.toDto(newLoan));
     }
 
     @PutMapping(path = "/{loanId}")
@@ -74,7 +75,7 @@ public class LoanController {
             if(updatedLoan == null){
                 return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(updatedLoan);
+            return ResponseEntity.ok(LoanMapper.toDto(updatedLoan));
         }catch (Exception e){
             Map<String, String> error = new HashMap<>();
             error.put("error", "Internal server error");

@@ -11,18 +11,27 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
+
         - id: book-service
           uri: lb://book-service
           predicates:
-            - Path=/api/v1/book/**
+            - Path=/books/**
+          filters:
+            - StripPrefix=1
+
         - id: membership-service
           uri: lb://membership-service
           predicates:
-            - Path=/api/v1/member/**
+            - Path=/users/**
+          filters:
+            - StripPrefix=1
+
         - id: forum-service
           uri: lb://forum-service
           predicates:
-            - Path=/api/v1/forum/**
+            - Path=/community/**
+          filters:
+            - StripPrefix=1
 
 eureka:
   client:
