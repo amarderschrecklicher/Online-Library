@@ -40,6 +40,8 @@ public class LoanService {
     public Loan getLoanById(Long id) {return loanRepository.getById(id);}
 
     public Boolean existsByBookCopyId(Long id) {return loanRepository.existsByBookCopyId(id);}
+ 
+    public boolean existsByMemberId(Long memberId) { return memberService.existsById(memberId); }
 
     public boolean existsById(Long id) {return loanRepository.existsById(id);}
 

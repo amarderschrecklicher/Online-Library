@@ -1,7 +1,9 @@
 package ba.unsa.etf.book_service.book_service.services;
 
 
+import ba.unsa.etf.book_service.book_service.config.RabbitConfig;
 import ba.unsa.etf.book_service.book_service.dtos.BookCopyDto;
+import ba.unsa.etf.book_service.book_service.dtos.BookReservedEvent;
 import ba.unsa.etf.book_service.book_service.mappers.BookCopyMapper;
 import ba.unsa.etf.book_service.book_service.models.Book;
 import ba.unsa.etf.book_service.book_service.models.BookCopy;
@@ -9,6 +11,8 @@ import ba.unsa.etf.book_service.book_service.repositories.BookCopyRepository;
 import ba.unsa.etf.book_service.book_service.repositories.BookRepository;
 
 import jakarta.transaction.Transactional;
+
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +28,13 @@ public class BookCopyService {
 
     private final BookCopyRepository bookCopyRepository;
     private final BookRepository bookRepository;
+    private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public BookCopyService(BookCopyRepository bookCopyRepository, BookRepository bookRepository) {
+    public BookCopyService(BookCopyRepository bookCopyRepository, BookRepository bookRepository, RabbitTemplate rabbitTemplate) {
         this.bookCopyRepository = bookCopyRepository;
         this.bookRepository = bookRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     public String generateCode() {
@@ -117,5 +123,26 @@ public class BookCopyService {
         BookCopy copy = optionalCopy.get();
         copy.setAvailable(newAvailable);
         return bookCopyRepository.save(copy);
-    }    
+    }
+    
+    public void reserveBookCopy(Long bookId, Long memberId) {
+        Optional<BookCopy> optionalCopy = bookCopyRepository.findById(bookId);
+        if (optionalCopy.isEmpty()) return;
+    
+        BookCopy copy = optionalCopy.get();
+        copy.setAvailable(false);
+        bookCopyRepository.save(copy);
+
+        BookReservedEvent event = new BookReservedEvent(bookId, memberId, UUID.randomUUID().toString());
+    
+        rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE, "membership.book.reserved", event);
+    }
+
+    public List<BookCopyDto> getAvailableBookCopies() {
+        List<BookCopy> availableCopies = bookCopyRepository.findByAvailableTrue();
+        if (availableCopies.isEmpty()) {
+            return List.of(); // Return an empty list if no available copies found
+        }
+        return BookCopyMapper.toDto(availableCopies);
+    }
 }

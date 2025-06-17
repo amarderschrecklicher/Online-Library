@@ -1,5 +1,6 @@
 package ba.unsa.etf.book_service.book_service.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,7 @@ public interface BookCopyRepository extends JpaRepository<BookCopy, Long> {
     boolean existsByCode(String code);
     Optional<BookCopy> findById(Long id);
     Optional<BookCopy> findFirstByBook_TitleAndAvailableTrue(String title);
+    List<BookCopy> findByAvailableTrue();
 
 
 }

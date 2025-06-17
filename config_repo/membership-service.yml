@@ -8,6 +8,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  securiry:
+    user:
+      name: admin
+      password: root
 
 eureka:
   client:

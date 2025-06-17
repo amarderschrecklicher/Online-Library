@@ -135,6 +135,28 @@ public class BookCopyController {
         }
     
         return ResponseEntity.ok(updatedCopy);
-    }    
+    }
+    
+    @PostMapping("/reserve/{copyId}/member/{memberId}")
+    public ResponseEntity<?> reserveBookCopy(@PathVariable Long copyId, @PathVariable Long memberId) {
+        try {
+            bookCopyService.reserveBookCopy(copyId, memberId);
+            return ResponseEntity.ok("Book copy reserved successfully");
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body(error);
+        }
+    }
 
+    @GetMapping("/available")
+    public ResponseEntity<?> getAvailableBookCopies() {
+        List<BookCopyDto> availableCopies = bookCopyService.getAvailableBookCopies();
+        if (availableCopies.isEmpty()) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "No available book copies found");
+            return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body(error);
+        }
+        return ResponseEntity.ok(availableCopies);
+    }
 }

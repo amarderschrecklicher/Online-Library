@@ -52,6 +52,12 @@ public class LoanController {
             return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body(error);
         }
 
+        if(!loanService.existsByMemberId(loanDto.getMemberId())) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Member does not exist");
+            return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body(error);
+        }
+
         Loan newLoan = loanService.createLoan(
                 loanDto.getMemberId(),
                 loanDto.getBookCopyId(),

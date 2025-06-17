@@ -2,10 +2,15 @@ package ba.unsa.etf.membership_service.membership_service.services;
 
 import ba.unsa.etf.membership_service.membership_service.dtos.MemberDto;
 import ba.unsa.etf.membership_service.membership_service.models.Member;
+import ba.unsa.etf.membership_service.membership_service.models.Reservation;
 import ba.unsa.etf.membership_service.membership_service.repositories.MemberRepository;
 import jakarta.transaction.Transactional;
+
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,7 +24,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Autowired
-    public MemberService(MemberRepository memberRepository) {this.memberRepository = memberRepository;}
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     public List<Member> getAllMembers() {return memberRepository.findAll();}
 
@@ -64,5 +71,10 @@ public class MemberService {
     public Optional<Member> findByUsername(String memberName) {
         return memberRepository.findByUsername(memberName);
     }
-}
+
+    public boolean existsById(Long memberId) {
+        return memberRepository.existsById(memberId);
+    }
+
+ }
 
