@@ -66,7 +66,7 @@ public class MemberController {
         }
     }
 
-    @PutMapping(path = "/{memberId}/role")
+    @PutMapping(path = "/role/{memberId}")
     public ResponseEntity<?> updateRole(@PathVariable("memberId") Long memberId,@RequestBody MemberDto memberDto){
         if(memberService.existsByEmail(memberDto.getEmail())) {
             Map<String, String> error = new HashMap<>();
