@@ -4,6 +4,8 @@ package ba.unsa.etf.book_service.book_service.services;
 import ba.unsa.etf.book_service.book_service.config.RabbitConfig;
 import ba.unsa.etf.book_service.book_service.dtos.BookCopyDto;
 import ba.unsa.etf.book_service.book_service.dtos.BookReservedEvent;
+import ba.unsa.etf.book_service.book_service.dtos.MembershipReservationConfirmedEvent;
+import ba.unsa.etf.book_service.book_service.dtos.MembershipReservationFailedEvent;
 import ba.unsa.etf.book_service.book_service.mappers.BookCopyMapper;
 import ba.unsa.etf.book_service.book_service.models.Book;
 import ba.unsa.etf.book_service.book_service.models.BookCopy;
@@ -12,6 +14,7 @@ import ba.unsa.etf.book_service.book_service.repositories.BookRepository;
 
 import jakarta.transaction.Transactional;
 
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -136,6 +139,15 @@ public class BookCopyService {
         BookReservedEvent event = new BookReservedEvent(bookId, memberId, UUID.randomUUID().toString());
     
         rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE, "membership.book.reserved", event);
+    }
+
+    @RabbitListener(queues = RabbitConfig.BOOK_MEMBERSHIP_CONFIRMED_QUEUE)
+    public void handleMembershipConfirmed(MembershipReservationConfirmedEvent event) {
+        System.out.println("✅ Reservation confirmed for bookId: " + event.getBookId());
+    }
+    @RabbitListener(queues = RabbitConfig.BOOK_MEMBERSHIP_FAILED_QUEUE)
+    public void handleMembershipFailed(MembershipReservationFailedEvent event) {
+        System.out.println("❌ Reservation failed for bookId: " + event.getBookId() + ", rolling back.");
     }
 
     public List<BookCopyDto> getAvailableBookCopies() {

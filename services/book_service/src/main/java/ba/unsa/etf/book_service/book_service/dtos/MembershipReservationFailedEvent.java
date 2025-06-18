@@ -1,4 +1,4 @@
-package ba.unsa.etf.membership_service.membership_service.dtos;
+package ba.unsa.etf.book_service.book_service.dtos;
 
 import lombok.Data;
 

@@ -36,6 +36,7 @@ public class AuthController {
         member.setUsername(request.getUsername());
         member.setPassword(passwordEncoder.encode(request.getPassword()));
         member.setEmail(request.getEmail());
+        member.setStatus("USER");
         memberRepository.save(member);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
@@ -53,11 +54,12 @@ public class AuthController {
         if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
-
-        String token = jwtUtil.generateToken(member.getUsername(), "USER");
+        // status je rola
+        String token = jwtUtil.generateToken(member.getUsername(), member.getStatus());
         Map<String, String> response = new HashMap<>();
         response.put("token", token);
         return ResponseEntity.ok(response);
 
     }
+
 }

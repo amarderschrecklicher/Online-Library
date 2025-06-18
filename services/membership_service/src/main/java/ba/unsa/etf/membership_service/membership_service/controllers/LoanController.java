@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -29,11 +30,13 @@ public class LoanController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public List<Loan> getAllLoans() {
         return loanService.getLoans();
     }
 
     @GetMapping("/{longId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('USER')")
     public ResponseEntity<?> getLoanData(@PathVariable("longId") Long longId) {
         if(!loanService.existsById(longId)) {
             Map<String, String> error = new HashMap<>();
@@ -45,6 +48,7 @@ public class LoanController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<?> createLoan(@RequestBody LoanDto loanDto) {
         if(loanService.existsByBookCopyId(loanDto.getBookCopyId())) {
             Map<String, String> error = new HashMap<>();
@@ -69,6 +73,7 @@ public class LoanController {
     }
 
     @PutMapping(path = "/{loanId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<?> updateLoan(@PathVariable("loanId") Long id, @Valid @RequestBody LoanDto updatedLoanData){
         if(loanService.existsByBookCopyId(updatedLoanData.getBookCopyId())) {
             Map<String, String> error = new HashMap<>();
@@ -91,6 +96,7 @@ public class LoanController {
     }
 
     @DeleteMapping(path="/{loanId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     public ResponseEntity<?> deleteLoan(@PathVariable("loanId") Long id){
         System.out.println("Delete called!");
         try{

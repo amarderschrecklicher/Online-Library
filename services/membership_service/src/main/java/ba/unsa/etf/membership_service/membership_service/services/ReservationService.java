@@ -32,9 +32,7 @@ public class ReservationService {
 
 
     @RabbitListener(queues = RabbitConfig.MEMBERSHIP_QUEUE)
-    public void handleBookReserved(String json) throws JsonProcessingException{
-        ObjectMapper objectMapper = new ObjectMapper();
-        BookReservedEvent bookReservedEvent = objectMapper.readValue(json, BookReservedEvent.class);
+    public void handleBookReserved(BookReservedEvent bookReservedEvent) throws JsonProcessingException{
 
         boolean allowed = checkEligibility(bookReservedEvent.getMemberId());
 

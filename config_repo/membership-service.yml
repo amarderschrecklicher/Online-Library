@@ -8,10 +8,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-  securiry:
-    user:
-      name: admin
-      password: root
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
 
 eureka:
   client:

@@ -66,6 +66,27 @@ public class MemberController {
         }
     }
 
+    @PutMapping(path = "/{memberId}/role")
+    public ResponseEntity<?> updateRole(@PathVariable("memberId") Long memberId,@RequestBody MemberDto memberDto){
+        if(memberService.existsByEmail(memberDto.getEmail())) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Member already exists");
+            return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body(error);
+        }
+        try{
+            Member updatedMember =memberService.updateMemberRole(memberId, memberDto);
+
+            if(updatedMember == null){
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok(MemberMapper.toDto(updatedMember));
+        }catch (Exception e){
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Internal server error");
+            return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteMember(@PathVariable Long id) {
         System.out.println("Delete called!");

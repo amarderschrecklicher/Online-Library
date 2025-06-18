@@ -13,6 +13,18 @@ services:
     networks:
       - backend
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672     # RabbitMQ port
+      - 15672:15672   # Web UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - backend
+
   config-server:
     build: ./config_server
     container_name: config-server
@@ -58,6 +70,7 @@ services:
       - mysql
       - eureka-server
       - config-server
+      - rabbitmq
     restart: on-failure
     networks:
       - backend
@@ -71,6 +84,7 @@ services:
       - mysql
       - eureka-server
       - config-server
+      - rabbitmq
     restart: on-failure
     networks:
       - backend
@@ -84,6 +98,7 @@ services:
       - mysql
       - eureka-server
       - config-server
+      - rabbitmq
     restart: on-failure
     networks:
       - backend

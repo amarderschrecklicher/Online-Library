@@ -9,6 +9,7 @@ import ba.unsa.etf.book_service.book_service.models.BookCopy;
 import ba.unsa.etf.book_service.book_service.services.BookCopyService;
 
 import org.apache.http.HttpStatus;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -159,4 +160,5 @@ public class BookCopyController {
         }
         return ResponseEntity.ok(availableCopies);
     }
+
 }

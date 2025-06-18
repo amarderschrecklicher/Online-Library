@@ -59,7 +59,6 @@ public class MemberService {
 
         existingMember.setUsername(updateMember.getUsername());
         existingMember.setEmail(updateMember.getEmail());
-        existingMember.setStatus(updateMember.getStatus());
         return memberRepository.save(existingMember);
 
     }
@@ -76,5 +75,9 @@ public class MemberService {
         return memberRepository.existsById(memberId);
     }
 
- }
+    public Member updateMemberRole(Long memberId, MemberDto memberDto) {
+        Member existingMember = memberRepository.getById( memberId);
+        existingMember.setStatus(memberDto.getStatus());
+        return memberRepository.save(existingMember);}
+}
 
