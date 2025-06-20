@@ -6,7 +6,7 @@ Users can:
 - Search, reserve, and borrow books  
 - Rate and review books  
 - Participate in forum discussions  
-- Order books online for postal delivery  
+- Order books online 
 
 This makes library services accessible even to users outside the physical location.
 
