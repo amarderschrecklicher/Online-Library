@@ -30,5 +30,11 @@ public class Member {
     private String password;
     private LocalDateTime createdAt;
     private String status;
+
+    private String firstName;
+    private String lastName;
+    private String phone;
+    private String address;
+
 }
 

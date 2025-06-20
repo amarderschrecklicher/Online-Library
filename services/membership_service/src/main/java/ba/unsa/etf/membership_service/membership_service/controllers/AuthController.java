@@ -27,39 +27,57 @@ public class AuthController {
     @Autowired private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         if (memberRepository.findByUsername(request.getUsername()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("error", "Username already exists"));
+        }
+
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Passwords do not match"));
         }
 
         Member member = new Member();
         member.setUsername(request.getUsername());
         member.setPassword(passwordEncoder.encode(request.getPassword()));
         member.setEmail(request.getEmail());
+        member.setFirstName(request.getFirstName());
+        member.setLastName(request.getLastName());
+        member.setPhone(request.getPhone());
+        member.setAddress(request.getAddress());
         member.setStatus("USER");
+
         memberRepository.save(member);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Map.of("message", "User registered successfully"));
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         Optional<Member> memberOpt = memberRepository.findByUsername(request.getUsername());
 
         if (memberOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Invalid username or password"));
         }
 
         Member member = memberOpt.get();
         if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Invalid username or password"));
         }
+
         // status je rola
         String token = jwtUtil.generateToken(member.getUsername(), member.getStatus());
         Map<String, String> response = new HashMap<>();
         response.put("token", token);
-        return ResponseEntity.ok(response);
+        response.put("message", "Login successful");
 
+        return ResponseEntity.ok(response);
     }
+
 
 }

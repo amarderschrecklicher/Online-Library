@@ -10,8 +10,8 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
-      routes:
 
+      routes:
         - id: book-service
           uri: lb://book-service
           predicates:
@@ -32,6 +32,20 @@ spring:
             - Path=/community/**
           filters:
             - StripPrefix=1
+
+
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
 
 eureka:
   client:

@@ -3,6 +3,7 @@ package ba.unsa.etf.membership_service.membership_service.controllers;
 import ba.unsa.etf.membership_service.membership_service.dtos.MemberDto;
 import ba.unsa.etf.membership_service.membership_service.mappers.MemberMapper;
 import ba.unsa.etf.membership_service.membership_service.models.Member;
+import ba.unsa.etf.membership_service.membership_service.repositories.MemberRepository;
 import ba.unsa.etf.membership_service.membership_service.services.MemberService;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,14 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
     @GetMapping
     public List<Member> getAllMembers() {
-        return memberService.getAllMembers();
+        return memberRepository.findAll();
     }
+
 
     @PostMapping
     public ResponseEntity<?> createMember(@RequestBody MemberDto memberDto) {
