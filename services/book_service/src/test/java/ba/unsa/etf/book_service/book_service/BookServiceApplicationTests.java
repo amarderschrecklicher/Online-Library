@@ -51,7 +51,7 @@ class BookServiceApplicationTests {
     );
 
         when(bookRepository.findAll()).thenReturn(books);
-        List<Book> result = bookService.GetAllBooks();
+        List<Book> result = bookService.getAllBooks();
 
         assertThat(result).hasSize(2);
         verify(bookRepository, times(1)).findAll();
@@ -101,7 +101,7 @@ class BookServiceApplicationTests {
             .genre("Fiction")
             .publishedYear(2001L)
             .bookCopies(List.of(
-                BookCopy.builder().id(101L).code("ISBN-A1").status("AVAILABLE").build()
+                BookCopy.builder().id(101L).code("ISBN-A1").available(true).build()
             ))
             .build()
         );

@@ -15,16 +15,18 @@ import java.util.List;
 public class ReservationController {
 
     @Autowired
-    private ReservationRepository reservationRepository;
+    private ReservationRepository reservationService;
 
     @GetMapping("/member/{memberId}")
     public List<Reservation> getReservationsForMember(@PathVariable Long memberId) {
-        return reservationRepository.findByMemberId(memberId);
+        return reservationService.findByMemberId(memberId);
     }
 
     @PostMapping
     public ResponseEntity<?> reserveBook(@RequestBody Reservation reservation) {
         reservation.setReservationDate(LocalDateTime.now());
-        return ResponseEntity.ok(reservationRepository.save(reservation));
+        return ResponseEntity.ok(reservationService.save(reservation));
     }
+
+    
 }

@@ -1,6 +1,7 @@
 package ba.unsa.etf.book_service.book_service.controllers;
 
 import ba.unsa.etf.book_service.book_service.dtos.BookDto;
+import ba.unsa.etf.book_service.book_service.mappers.BookMapper;
 import ba.unsa.etf.book_service.book_service.models.Book;
 import ba.unsa.etf.book_service.book_service.services.BookCopyService;
 import ba.unsa.etf.book_service.book_service.services.BookService;
@@ -41,6 +42,11 @@ class BookController {
     public List<Book> getAllBooks() {
         return bookService.getAllBooks();
     }
+
+    @GetMapping(path = "/{bookId}")
+    public Book getBookById(@PathVariable("bookId") Long id) {
+        return bookService.getBookById(id);
+    }
     
     
     @GetMapping("/paged")
@@ -77,7 +83,7 @@ class BookController {
             bookDto.getPublishedYear()
         );
         
-        return ResponseEntity.ok().body(newBook);
+        return ResponseEntity.ok().body(BookMapper.toDto(newBook));
     }
 
     @PutMapping(path = "/{bookId}")
@@ -95,7 +101,7 @@ class BookController {
                 return ResponseEntity.notFound().build();
             }
 
-            return ResponseEntity.ok(updatedBook);
+            return ResponseEntity.ok(BookMapper.toDto(updatedBook));
         }catch (Exception e){
             Map<String, String> error = new HashMap<>();
             error.put("error", "Internal server error");

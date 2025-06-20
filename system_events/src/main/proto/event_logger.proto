@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "ba.unsa.etf.systemevents.grpc";
+option java_outer_classname = "EventLoggerProto";
+
+service EventLoggerService {
+  rpc LogEvent (EventRequest) returns (EventResponse);
+}
+
+message EventRequest {
+  string timestamp = 1;
+  string microservice = 2;
+  string username = 3;
+  string actionType = 4;
+  string resource = 5;
+  string responseStatus = 6;
+}
+
+message EventResponse {
+  string message = 1;
+  bool success = 2;
+}
