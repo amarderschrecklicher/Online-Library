@@ -1,7 +1,19 @@
-📚 Online Library
-Online Library is a web application designed to simplify library management for both users and staff. Users can search, reserve, and borrow books, rate and review them, participate in forum discussions, and even order books online for postal delivery — making the service accessible to users outside the physical library.
+# 📚 Online Library
 
-👥 Team Members
-Bakir Pljakić
-Amar Tahirović
-Edna Bašić
+**Online Library** is a web application designed to simplify library management for both users and staff.  
+Users can:
+
+- Search, reserve, and borrow books  
+- Rate and review books  
+- Participate in forum discussions  
+- Order books online for postal delivery  
+
+This makes library services accessible even to users outside the physical location.
+
+---
+
+## 👥 Team Members
+
+- **Bakir Pljakić**  
+- **Amar Tahirović**  
+- **Edna Bašić**
