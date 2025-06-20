@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,6 +111,21 @@ public class LoanController {
             return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body(error);
         }
 
+    }
+
+    @GetMapping("member/{memberId}")
+    public ResponseEntity<List<LoanDto>> getMemberLoans(@PathVariable("memberId") Long id) {
+        List<Loan> loans = loanService.getLoansByMemberId(id);
+
+        if (loans.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        List<LoanDto> loanDtos = loans.stream()
+                .map(LoanMapper::toDto)
+                .toList();
+
+        return ResponseEntity.ok(loanDtos);
     }
 
 

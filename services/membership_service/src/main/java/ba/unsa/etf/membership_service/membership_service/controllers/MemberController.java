@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/member")
@@ -106,4 +107,11 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body(error);
         }
     }
+
+    @GetMapping("/email")
+    public ResponseEntity<?> getMemberByEmail(@RequestParam String email) {
+        Optional<Member> member = memberService.getMemberByEmail(email);
+        return ResponseEntity.ok().body(MemberMapper.toDto(member.get()));
+    }
+
 }

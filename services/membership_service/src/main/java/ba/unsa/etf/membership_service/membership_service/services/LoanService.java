@@ -91,4 +91,9 @@ public class LoanService {
     public void deleteLoan(Long id) {
         loanRepository.deleteById(id);
     }
+
+    public List<Loan> getLoansByMemberId(Long memberId) {
+        return loanRepository.findByMemberId(memberId);
+    }
+
 }
